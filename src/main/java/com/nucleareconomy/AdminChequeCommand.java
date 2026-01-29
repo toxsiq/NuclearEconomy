@@ -54,7 +54,7 @@ public class AdminChequeCommand implements CommandExecutor {
                         player.getInventory().addItem(cheque);
                         MessageUtil.sendEconomyMessage(sender, economy,
                                 "-------------------------",
-                                "CHEQUE ADMIN",
+                                "&lCHEQUE ADMIN",
                                 "Cheque criado com sucesso!",
                                 "-------------------------");
                     });

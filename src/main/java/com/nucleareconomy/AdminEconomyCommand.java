@@ -51,7 +51,7 @@ public class AdminEconomyCommand implements CommandExecutor {
         }
         MessageUtil.sendEconomyMessage(sender, economy,
                 "-------------------------",
-                "ADMIN",
+                "&lADMIN",
                 "Voce ajustou " + economy.getSymbol() + " " + NumberFormatter.format(amount) + " de " + economy.getDisplayName() + " para " + name + "!",
                 "-------------------------");
         return true;

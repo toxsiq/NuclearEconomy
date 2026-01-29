@@ -57,7 +57,7 @@ public class ChequeListener implements Listener {
         player.closeInventory();
         MessageUtil.sendEconomyMessage(player, selected,
                 "-------------------------",
-                "CHEQUE",
+                "&lCHEQUE",
                 "Digite o valor do cheque no chat.",
                 "-------------------------");
     }
@@ -90,7 +90,7 @@ public class ChequeListener implements Listener {
                     if (!removed) {
                         Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
                                 "-------------------------",
-                                "CHEQUE",
+                                "&lCHEQUE",
                                 "Saldo insuficiente.",
                                 "-------------------------"));
                         return;
@@ -102,7 +102,7 @@ public class ChequeListener implements Listener {
                     player.getInventory().addItem(cheque);
                     MessageUtil.sendEconomyMessage(player, economy,
                             "-------------------------",
-                            "CHEQUE",
+                            "&lCHEQUE",
                             "Cheque criado com sucesso!",
                             "-------------------------");
                 });
@@ -117,7 +117,7 @@ public class ChequeListener implements Listener {
     private void sendInvalidValue(Player player, EconomyType economy) {
         Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
                 "-------------------------",
-                "CHEQUE",
+                "&lCHEQUE",
                 "Valor invalido.",
                 "-------------------------"));
     }

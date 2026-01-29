@@ -48,7 +48,8 @@ public class EconomyCommand implements CommandExecutor {
             if (!economy.supportsPay()) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "Essa economia nao suporta pagamentos.",
                         "-------------------------");
                 return true;
@@ -56,7 +57,8 @@ public class EconomyCommand implements CommandExecutor {
             if (args.length < 3) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "Use: /" + economy.getCommand() + " pay <jogador> <valor>",
                         "-------------------------");
                 return true;
@@ -65,7 +67,8 @@ public class EconomyCommand implements CommandExecutor {
             if (target == null) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "Jogador nao encontrado.",
                         "-------------------------");
                 return true;
@@ -76,7 +79,8 @@ public class EconomyCommand implements CommandExecutor {
             } catch (IllegalArgumentException ex) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "Valor invalido.",
                         "-------------------------");
                 return true;
@@ -84,7 +88,8 @@ public class EconomyCommand implements CommandExecutor {
             if (amount <= 0) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "O valor deve ser maior que zero.",
                         "-------------------------");
                 return true;
@@ -92,7 +97,8 @@ public class EconomyCommand implements CommandExecutor {
             if (!balanceStore.removeBalance(player.getUniqueId(), player.getName(), economy, amount)) {
                 MessageUtil.sendEconomyMessage(player, economy,
                         "-------------------------",
-                        "PAGAMENTOS",
+                        "&lPAGAMENTOS",
+                        " ",
                         "Saldo insuficiente.",
                         "-------------------------");
                 return true;
@@ -100,12 +106,14 @@ public class EconomyCommand implements CommandExecutor {
             balanceStore.addBalance(target.getUniqueId(), target.getName(), economy, amount);
             MessageUtil.sendEconomyMessage(player, economy,
                     "-------------------------",
-                    "PAGAMENTOS",
+                    "&lPAGAMENTOS",
+                    " ",
                     "Voce enviou " + economy.getSymbol() + " " + NumberFormatter.format(amount) + " de " + economy.getDisplayName() + " para " + target.getName() + "!",
                     "-------------------------");
             MessageUtil.sendEconomyMessage(target, economy,
                     "-------------------------",
-                    "PAGAMENTOS",
+                    "&lPAGAMENTOS",
+                    " ",
                     "Voce recebeu " + economy.getSymbol() + " " + NumberFormatter.format(amount) + " de " + economy.getDisplayName() + " de " + player.getName() + "!",
                     "-------------------------");
             return true;
@@ -119,7 +127,16 @@ public class EconomyCommand implements CommandExecutor {
             } else {
                 Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                     try {
-                        Map<EconomyType, Double> balances = database.loadBalances(targetId, target.getName() == null ? args[0] : target.getName());
+                        Map<EconomyType, Double> balances = database.loadBalancesIfExists(targetId);
+                        if (balances == null) {
+                            Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
+                                    "-------------------------",
+                                    "&lSEU SALDO",
+                                    " ",
+                                    "Jogador nao encontrado.",
+                                    "-------------------------"));
+                            return;
+                        }
                         double balance = balances.getOrDefault(economy, 0D);
                         Bukkit.getScheduler().runTask(plugin, () -> sendBalanceMessage(player, target.getName() == null ? args[0] : target.getName(), balance, false));
                     } catch (SQLException e) {
@@ -139,7 +156,8 @@ public class EconomyCommand implements CommandExecutor {
                 : "O jogador " + targetName + " possui " + economy.getSymbol() + " " + NumberFormatter.format(balance) + " de " + economy.getDisplayName();
         MessageUtil.sendEconomyMessage(player, economy,
                 "-------------------------",
-                "SEU SALDO",
+                "&lSEU SALDO",
+                " ",
                 line,
                 "-------------------------");
     }
@@ -151,23 +169,29 @@ public class EconomyCommand implements CommandExecutor {
         long seconds = remaining.minusMinutes(minutes).toSeconds();
         MessageUtil.sendEconomyMessage(player, economy,
                 "-------------------------",
-                economy.getDisplayName().toUpperCase() + " TOP",
+                "&l" + economy.getDisplayName().toUpperCase() + " TOP",
                 "(Atualiza em " + String.format("%02d:%02d", minutes, seconds) + ")",
+                " ",
                 buildTopLines(top),
+                " ",
                 "-------------------------");
     }
 
     private String buildTopLines(LinkedHashMap<String, Double> top) {
         StringBuilder builder = new StringBuilder();
         int index = 1;
+        String economyColor = "&" + economy.getColor().getChar();
         for (Map.Entry<String, Double> entry : top.entrySet()) {
-            builder.append(index).append("° ").append(entry.getKey())
-                    .append(" - ").append(economy.getSymbol()).append(" ").append(NumberFormatter.format(entry.getValue())).append(" de ")
-                    .append(economy.getDisplayName()).append("\n");
+            builder.append("&f").append(index).append(". ")
+                    .append("&7").append(entry.getKey())
+                    .append(" &8- ")
+                    .append(economyColor).append(economy.getSymbol()).append(NumberFormatter.format(entry.getValue()))
+                    .append(" ").append(economy.getDisplayName())
+                    .append("\n");
             index++;
         }
         if (builder.length() == 0) {
-            return "Nenhum dado disponivel.";
+            return "&7Nenhum dado disponivel.";
         }
         return builder.toString().trim();
     }

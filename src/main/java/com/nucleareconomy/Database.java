@@ -75,6 +75,25 @@ public class Database {
         return balances;
     }
 
+    public synchronized Map<EconomyType, Double> loadBalancesIfExists(UUID uuid) throws SQLException {
+        Map<EconomyType, Double> balances = new EnumMap<>(EconomyType.class);
+        for (EconomyType type : EconomyType.values()) {
+            balances.put(type, 0D);
+        }
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM balances WHERE uuid = ?")) {
+            statement.setString(1, uuid.toString());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    for (EconomyType type : EconomyType.values()) {
+                        balances.put(type, resultSet.getDouble(type.getCommand()));
+                    }
+                    return balances;
+                }
+            }
+        }
+        return null;
+    }
+
     private void insertPlayer(UUID uuid, String name) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO balances (uuid, name) VALUES (?, ?)")) {

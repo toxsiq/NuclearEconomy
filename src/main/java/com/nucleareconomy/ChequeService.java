@@ -77,7 +77,7 @@ public class ChequeService {
                 if (record == null || record.redeemed()) {
                     Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
                             "-------------------------",
-                            "CHEQUE",
+                            "&lCHEQUE",
                             "Este cheque ja foi usado.",
                             "-------------------------"));
                     return;
@@ -93,7 +93,7 @@ public class ChequeService {
                     }
                     MessageUtil.sendEconomyMessage(player, economy,
                             "-------------------------",
-                            "CHEQUE",
+                            "&lCHEQUE",
                             "Voce resgatou " + economy.getSymbol() + " " + NumberFormatter.format(record.value()) + " de " + economy.getDisplayName() + "!",
                             "-------------------------");
                 });
