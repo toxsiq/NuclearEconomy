@@ -22,11 +22,11 @@ public class AdminChequeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("nucleareconomy.admin")) {
-            sender.sendMessage(ChatColor.RED + "Sem permissao.");
+            sendError(sender, "Sem permissao!");
             return true;
         }
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("Apenas jogadores podem usar esse comando.");
+            sendError(sender, "Apenas jogadores podem usar esse comando!");
             return true;
         }
         if (args.length == 0) {
@@ -36,7 +36,7 @@ public class AdminChequeCommand implements CommandExecutor {
         if (args.length >= 3 && args[0].equalsIgnoreCase("criar")) {
             EconomyType economy = EconomyType.fromCommand(args[1]);
             if (economy == null) {
-                sender.sendMessage(ChatColor.RED + "Economia invalida.");
+                sendError(sender, "Economia invalida!");
                 return true;
             }
             String valueText = args[2];
@@ -46,7 +46,7 @@ public class AdminChequeCommand implements CommandExecutor {
                             ? chequeService.computeServerChequeValue(economy)
                             : NumberFormatter.parse(valueText);
                     if (value <= 0) {
-                        sender.sendMessage(ChatColor.RED + "Valor invalido.");
+                        Bukkit.getScheduler().runTask(plugin, () -> sendError(sender, "Valor invalido!"));
                         return;
                     }
                     ItemStack cheque = chequeService.createCheque(economy, value, "Servidor");
@@ -59,12 +59,20 @@ public class AdminChequeCommand implements CommandExecutor {
                                 "-------------------------");
                     });
                 } catch (SQLException | IllegalArgumentException e) {
-                    sender.sendMessage(ChatColor.RED + "Nao foi possivel criar o cheque.");
+                    Bukkit.getScheduler().runTask(plugin, () -> sendError(sender, "Nao foi possivel criar o cheque!"));
                 }
             });
             return true;
         }
-        sender.sendMessage(ChatColor.RED + "Use: /acheque [criar <economia> <valor>] ");
+        sendError(sender, "Use: /acheque [criar <economia> <valor>]");
         return true;
+    }
+
+    private void sendError(CommandSender sender, String message) {
+        if (sender instanceof Player player) {
+            MessageUtil.sendPlainMessage(player, ChatColor.RED, message);
+        } else {
+            sender.sendMessage(ChatColor.RED + message);
+        }
     }
 }

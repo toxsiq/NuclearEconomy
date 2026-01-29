@@ -58,7 +58,7 @@ public class NuclearEconomyPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (balanceStore != null) {
-            balanceStore.saveAll();
+            balanceStore.saveAllSync();
         }
         if (database != null) {
             database.close();

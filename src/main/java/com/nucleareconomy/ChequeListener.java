@@ -58,6 +58,7 @@ public class ChequeListener implements Listener {
         MessageUtil.sendEconomyMessage(player, selected,
                 "-------------------------",
                 "&lCHEQUE",
+                " ",
                 "Digite o valor do cheque no chat.",
                 "-------------------------");
     }
@@ -88,11 +89,8 @@ public class ChequeListener implements Listener {
                 if (!admin) {
                     boolean removed = balanceStore.removeBalance(player.getUniqueId(), player.getName(), economy, value);
                     if (!removed) {
-                        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
-                                "-------------------------",
-                                "&lCHEQUE",
-                                "Saldo insuficiente.",
-                                "-------------------------"));
+                        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
+                                "Saldo insuficiente!"));
                         return;
                     }
                 }
@@ -103,6 +101,7 @@ public class ChequeListener implements Listener {
                     MessageUtil.sendEconomyMessage(player, economy,
                             "-------------------------",
                             "&lCHEQUE",
+                            " ",
                             "Cheque criado com sucesso!",
                             "-------------------------");
                 });
@@ -115,11 +114,8 @@ public class ChequeListener implements Listener {
     }
 
     private void sendInvalidValue(Player player, EconomyType economy) {
-        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
-                "-------------------------",
-                "&lCHEQUE",
-                "Valor invalido.",
-                "-------------------------"));
+        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
+                "Valor invalido!"));
     }
 
     @EventHandler

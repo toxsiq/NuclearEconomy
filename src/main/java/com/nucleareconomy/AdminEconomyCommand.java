@@ -19,11 +19,11 @@ public class AdminEconomyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("nucleareconomy.admin")) {
-            sender.sendMessage(ChatColor.RED + "Sem permissao.");
+            sendError(sender, "Sem permissao!");
             return true;
         }
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "Use: /a" + economy.getCommand() + " <set|add|remove> <jogador> <valor>");
+            sendError(sender, "Use: /a" + economy.getCommand() + " <set|add|remove> <jogador> <valor>");
             return true;
         }
         String action = args[0].toLowerCase();
@@ -32,11 +32,11 @@ public class AdminEconomyCommand implements CommandExecutor {
         try {
             amount = NumberFormatter.parse(args[2]);
         } catch (IllegalArgumentException ex) {
-            sender.sendMessage(ChatColor.RED + "Valor invalido.");
+            sendError(sender, "Valor invalido!");
             return true;
         }
         if (amount < 0) {
-            sender.sendMessage(ChatColor.RED + "Valor invalido.");
+            sendError(sender, "Valor invalido!");
             return true;
         }
         String name = target.getName() == null ? args[1] : target.getName();
@@ -45,15 +45,23 @@ public class AdminEconomyCommand implements CommandExecutor {
             case "add" -> balanceStore.addBalance(target.getUniqueId(), name, economy, amount);
             case "remove" -> balanceStore.removeBalance(target.getUniqueId(), name, economy, amount);
             default -> {
-                sender.sendMessage(ChatColor.RED + "Use: /a" + economy.getCommand() + " <set|add|remove> <jogador> <valor>");
+                sendError(sender, "Use: /a" + economy.getCommand() + " <set|add|remove> <jogador> <valor>");
                 return true;
             }
         }
         MessageUtil.sendEconomyMessage(sender, economy,
                 "-------------------------",
                 "&lADMIN",
-                "Voce ajustou " + economy.getSymbol() + " " + NumberFormatter.format(amount) + " de " + economy.getDisplayName() + " para " + name + "!",
+                "Você ajustou " + economy.getSymbol() + " " + NumberFormatter.format(amount) + " de " + economy.getDisplayName() + " para " + name + "!",
                 "-------------------------");
         return true;
+    }
+
+    private void sendError(CommandSender sender, String message) {
+        if (sender instanceof org.bukkit.entity.Player player) {
+            MessageUtil.sendPlainMessage(player, ChatColor.RED, message);
+        } else {
+            sender.sendMessage(ChatColor.RED + message);
+        }
     }
 }

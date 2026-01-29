@@ -75,11 +75,8 @@ public class ChequeService {
                 UUID id = UUID.fromString(idString);
                 ChequeRecord record = database.loadCheque(id);
                 if (record == null || record.redeemed()) {
-                    Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendEconomyMessage(player, economy,
-                            "-------------------------",
-                            "&lCHEQUE",
-                            "Este cheque ja foi usado.",
-                            "-------------------------"));
+                    Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
+                            "Este cheque ja foi usado!"));
                     return;
                 }
                 database.markChequeRedeemed(id);
@@ -94,7 +91,8 @@ public class ChequeService {
                     MessageUtil.sendEconomyMessage(player, economy,
                             "-------------------------",
                             "&lCHEQUE",
-                            "Voce resgatou " + economy.getSymbol() + " " + NumberFormatter.format(record.value()) + " de " + economy.getDisplayName() + "!",
+                            " ",
+                            "Você resgatou " + economy.getSymbol() + " " + NumberFormatter.format(record.value()) + " de " + economy.getDisplayName() + "!",
                             "-------------------------");
                 });
             } catch (SQLException e) {

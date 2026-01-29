@@ -78,6 +78,10 @@ public class BalanceStore {
         if (balances == null) {
             return;
         }
+        if (!plugin.isEnabled()) {
+            savePlayerSync(uuid, name, balances);
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 database.saveBalances(uuid, name, balances);
@@ -85,5 +89,23 @@ public class BalanceStore {
                 plugin.getLogger().warning("Falha ao salvar saldo de " + name + ": " + e.getMessage());
             }
         });
+    }
+
+    public void saveAllSync() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            UUID uuid = player.getUniqueId();
+            Map<EconomyType, Double> balances = cache.get(uuid);
+            if (balances != null) {
+                savePlayerSync(uuid, player.getName(), balances);
+            }
+        }
+    }
+
+    private void savePlayerSync(UUID uuid, String name, Map<EconomyType, Double> balances) {
+        try {
+            database.saveBalances(uuid, name, balances);
+        } catch (SQLException e) {
+            plugin.getLogger().warning("Falha ao salvar saldo de " + name + ": " + e.getMessage());
+        }
     }
 }
