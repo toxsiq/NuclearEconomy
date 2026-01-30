@@ -1,0 +1,41 @@
+name: NuclearEconomy
+main: com.nucleareconomy.NuclearEconomyPlugin
+version: 1.0.0
+api-version: '1.20'
+commands:
+  money:
+    description: Ver saldo de Money
+  tokens:
+    description: Ver saldo de Tokens
+  cash:
+    description: Ver saldo de Cash
+  toxina:
+    description: Ver saldo de Toxina
+  radiacao:
+    description: Ver saldo de Radiação
+  peixes:
+    description: Ver saldo de Peixes
+  reais:
+    description: Ver saldo de Reais
+  cheque:
+    description: Criar cheques pessoais
+    aliases: [cheques]
+  acheque:
+    description: Criar cheques administrativos
+  amoney:
+    description: Admin Money
+  atokens:
+    description: Admin Tokens
+  acash:
+    description: Admin Cash
+  atoxina:
+    description: Admin Toxina
+  aradiacao:
+    description: Admin Radiação
+  apeixes:
+    description: Admin Peixes
+  areais:
+    description: Admin Reais
+permissions:
+  nucleareconomy.admin:
+    default: op
