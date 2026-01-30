@@ -58,10 +58,6 @@ public class AdminEconomyCommand implements CommandExecutor {
     }
 
     private void sendError(CommandSender sender, String message) {
-        if (sender instanceof org.bukkit.entity.Player player) {
-            MessageUtil.sendPlainMessage(player, ChatColor.RED, message);
-        } else {
-            sender.sendMessage(ChatColor.RED + message);
-        }
+        sender.sendMessage(ChatColor.RED + message);
     }
 }

@@ -89,8 +89,7 @@ public class ChequeListener implements Listener {
                 if (!admin) {
                     boolean removed = balanceStore.removeBalance(player.getUniqueId(), player.getName(), economy, value);
                     if (!removed) {
-                        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
-                                "Saldo insuficiente!"));
+                        Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(ChatColor.RED + "Saldo insuficiente!"));
                         return;
                     }
                 }
@@ -114,8 +113,7 @@ public class ChequeListener implements Listener {
     }
 
     private void sendInvalidValue(Player player, EconomyType economy) {
-        Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
-                "Valor invalido!"));
+        Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(ChatColor.RED + "Valor invalido!"));
     }
 
     @EventHandler

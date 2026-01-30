@@ -46,36 +46,35 @@ public class EconomyCommand implements CommandExecutor {
         }
         if (args[0].equalsIgnoreCase("pay") || args[0].equalsIgnoreCase("enviar")) {
             if (!economy.supportsPay()) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "Essa economia nao suporta pagamentos!");
+                player.sendMessage(ChatColor.RED + "Essa economia nao suporta pagamentos!");
                 return true;
             }
             if (args.length < 3) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED,
-                        "Use: /" + economy.getCommand() + " pay <jogador> <valor>");
+                player.sendMessage(ChatColor.RED + "Use: /" + economy.getCommand() + " pay <jogador> <valor>");
                 return true;
             }
             Player target = Bukkit.getPlayerExact(args[1]);
             if (target == null) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "Jogador nao encontrado!");
+                player.sendMessage(ChatColor.RED + "Jogador nao encontrado!");
                 return true;
             }
             if (target.getUniqueId().equals(player.getUniqueId())) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "Você não pode enviar para você mesmo!");
+                player.sendMessage(ChatColor.RED + "Você não pode enviar para você mesmo!");
                 return true;
             }
             double amount;
             try {
                 amount = NumberFormatter.parse(args[2]);
             } catch (IllegalArgumentException ex) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "Valor invalido!");
+                player.sendMessage(ChatColor.RED + "Valor invalido!");
                 return true;
             }
             if (amount <= 0) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "O valor deve ser maior que zero!");
+                player.sendMessage(ChatColor.RED + "O valor deve ser maior que zero!");
                 return true;
             }
             if (!balanceStore.removeBalance(player.getUniqueId(), player.getName(), economy, amount)) {
-                MessageUtil.sendPlainMessage(player, ChatColor.RED, "Saldo insuficiente!");
+                player.sendMessage(ChatColor.RED + "Saldo insuficiente!");
                 return true;
             }
             balanceStore.addBalance(target.getUniqueId(), target.getName(), economy, amount);
@@ -104,8 +103,7 @@ public class EconomyCommand implements CommandExecutor {
                     try {
                         Map<EconomyType, Double> balances = database.loadBalancesIfExists(targetId);
                         if (balances == null) {
-                            Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
-                                    "Jogador nao encontrado!"));
+                            Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(ChatColor.RED + "Jogador nao encontrado!"));
                             return;
                         }
                         double balance = balances.getOrDefault(economy, 0D);
@@ -117,7 +115,7 @@ public class EconomyCommand implements CommandExecutor {
             }
             return true;
         }
-        MessageUtil.sendPlainMessage(player, ChatColor.RED, "Uso incorreto do comando.");
+        player.sendMessage(ChatColor.RED + "Uso incorreto do comando.");
         return true;
     }
 

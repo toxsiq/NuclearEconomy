@@ -69,10 +69,6 @@ public class AdminChequeCommand implements CommandExecutor {
     }
 
     private void sendError(CommandSender sender, String message) {
-        if (sender instanceof Player player) {
-            MessageUtil.sendPlainMessage(player, ChatColor.RED, message);
-        } else {
-            sender.sendMessage(ChatColor.RED + message);
-        }
+        sender.sendMessage(ChatColor.RED + message);
     }
 }

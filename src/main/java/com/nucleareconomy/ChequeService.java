@@ -75,8 +75,7 @@ public class ChequeService {
                 UUID id = UUID.fromString(idString);
                 ChequeRecord record = database.loadCheque(id);
                 if (record == null || record.redeemed()) {
-                    Bukkit.getScheduler().runTask(plugin, () -> MessageUtil.sendPlainMessage(player, ChatColor.RED,
-                            "Este cheque ja foi usado!"));
+                    Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(ChatColor.RED + "Este cheque ja foi usado!"));
                     return;
                 }
                 database.markChequeRedeemed(id);
